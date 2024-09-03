@@ -1,0 +1,36 @@
+
+
+ALTER TRIGGER AMANDA.ATTACHMENT_DEL_LOG DISABLE;
+
+ALTER TRIGGER AMANDA.ATTACHMENT_UPD_LOG DISABLE;
+
+ALTER TRIGGER AMANDA.ATTACHMENT_DEL DISABLE;
+
+CREATE TABLE AMANDA.attachmentBKT AS
+
+SELECT
+ 
+    AttachmentRSN,
+    -- Original and transformed dospath column
+    DOSPATH,
+    CASE
+        WHEN UPPER(DOSPATH) LIKE UPPER('K:\%') THEN
+            REPLACE(UPPER(DOSPATH), UPPER('K:\'), '\\abbotsford.loc\AppData\Amanda')
+        WHEN UPPER(DOSPATH) LIKE UPPER('\\fileserva\Kommon%') THEN
+            REPLACE(UPPER(DOSPATH), UPPER('\\fileserva\Kommon'), '\\abbotsford.loc\AppData\Amanda')
+        WHEN UPPER(DOSPATH) LIKE UPPER('\\fileserva\appdata\Amanda%') THEN
+            REPLACE(UPPER(DOSPATH), UPPER('\\fileserva\appdata\Amanda'), '\\abbotsford.loc\AppData\Amanda')
+        ELSE
+            DOSPATH
+    END     AS NEW_DOSPATH
+FROM
+    AMANDA.ATTACHMENT
+WHERE
+    DOSPATH IS NOT NULL;
+
+ALTER TRIGGER AMANDA.ATTACHMENT_DEL_LOG ENABLE;
+
+ALTER TRIGGER AMANDA.ATTACHMENT_UPD_LOG ENABLE;
+
+ALTER TRIGGER AMANDA.ATTACHMENT_DEL ENABLE;
+
