@@ -4,106 +4,10 @@ ALTER TRIGGER AMANDA.VALIDDOCUMENT_DEL DISABLE;
 
 UPDATE AMANDA.VALIDDOCUMENT
 SET
-    MERGEDOCUMENT = CASE WHEN UPPER(
-        MERGEDOCUMENT
-    ) LIKE UPPER(
-        'K:\%'
-    ) THEN REPLACE(
-        UPPER(MERGEDOCUMENT),
-        UPPER('K:\'),
-        '\\abbotsford.loc\AppData\Amanda'
-    ) WHEN UPPER(
-        MERGEDOCUMENT
-    ) LIKE UPPER(
-        '\\fileserva\Kommon%'
-    ) THEN REPLACE(
-        UPPER(MERGEDOCUMENT),
-        UPPER('\\fileserva\Kommon'),
-        '\\abbotsford.loc\AppData\Amanda'
-    ) WHEN UPPER(
-        MERGEDOCUMENT
-    ) LIKE UPPER(
-        '\\fileserva\appdata\Amanda%'
-    ) THEN REPLACE(
-        UPPER(MERGEDOCUMENT),
-        UPPER('\\fileserva\appdata\Amanda'),
-        '\\abbotsford.loc\AppData\Amanda'
-    ) ELSE MERGEDOCUMENT END,
-    SAVEPATH = CASE WHEN UPPER(
-        SAVEPATH
-    ) LIKE UPPER(
-        'K:\%'
-    ) THEN REPLACE(
-        UPPER(SAVEPATH),
-        UPPER('K:\'),
-        '\\abbotsford.loc\AppData\Amanda'
-    ) WHEN UPPER(
-        SAVEPATH
-    ) LIKE UPPER(
-        '\\fileserva\Kommon%'
-    ) THEN REPLACE(
-        UPPER(SAVEPATH),
-        UPPER('\\fileserva\Kommon'),
-        '\\abbotsford.loc\AppData\Amanda'
-    ) WHEN UPPER(
-        SAVEPATH
-    ) LIKE UPPER(
-        '\\fileserva\appdata\Amanda%'
-    ) THEN REPLACE(
-        UPPER(SAVEPATH),
-        UPPER('\\fileserva\appdata\Amanda'),
-        '\\abbotsford.loc\AppData\Amanda'
-    ) ELSE SAVEPATH END,
-    TEMPPATH = CASE WHEN UPPER(
-        TEMPPATH
-    ) LIKE UPPER(
-        'K:\%'
-    ) THEN REPLACE(
-        UPPER(TEMPPATH),
-        UPPER('K:\'),
-        '\\abbotsford.loc\AppData\Amanda'
-    ) WHEN UPPER(
-        TEMPPATH
-    ) LIKE UPPER(
-        '\\fileserva\Kommon%'
-    ) THEN REPLACE(
-        UPPER(TEMPPATH),
-        UPPER('\\fileserva\Kommon'),
-        '\\abbotsford.loc\AppData\Amanda'
-    ) WHEN UPPER(
-        TEMPPATH
-    ) LIKE UPPER(
-        '\\fileserva\appdata\Amanda%'
-    ) THEN REPLACE(
-        UPPER(TEMPPATH),
-        UPPER('\\fileserva\appdata\Amanda'),
-        '\\abbotsford.loc\AppData\Amanda'
-    ) ELSE TEMPPATH END,
-    SENDPATH = CASE WHEN UPPER(
-        SENDPATH
-    ) LIKE UPPER(
-        'K:\%'
-    ) THEN REPLACE(
-        UPPER(SENDPATH),
-        UPPER('K:\'),
-        '\\abbotsford.loc\AppData\Amanda'
-    ) WHEN UPPER(
-        SENDPATH
-    ) LIKE UPPER(
-        '\\fileserva\Kommon%'
-    ) THEN REPLACE(
-        UPPER(SENDPATH),
-        UPPER('\\fileserva\Kommon'),
-        '\\abbotsford.loc\AppData\Amanda'
-    ) WHEN UPPER(
-        SENDPATH
-    ) LIKE UPPER(
-        '\\fileserva\appdata\Amanda%'
-    ) THEN REPLACE(
-        UPPER(SENDPATH),
-        UPPER('\\fileserva\appdata\Amanda'),
-        '\\abbotsford.loc\AppData\Amanda'
-    ) ELSE SENDPATH END;
+    MERGEDOCUMENT = C_REPLACE_PATH(MERGEDOCUMENT),
+    SAVEPATH = C_REPLACE_PATH(SAVEPATH),
+    TEMPPATH = C_REPLACE_PATH(TEMPPATH),
+    SENDPATH = C_REPLACE_PATH(SENDPATH);
 
 ALTER TRIGGER AMANDA.VALIDDOCUMENT_UPD ENABLE;
 
@@ -111,3 +15,9 @@ ALTER TRIGGER AMANDA.VALIDDOCUMENT_DEL ENABLE;
 
 
 COMMIT;
+
+select *
+from AMANDA.VALIDDOCUMENT;
+
+
+commit;
